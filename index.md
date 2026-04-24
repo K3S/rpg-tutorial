@@ -22,6 +22,8 @@ Sponsored by [King III Solutions](https://k3s.com).
 - Students learning RPGLE and CL for the first time
 - Anyone who wants concrete, working examples of real-world RPG patterns
 
+---
+
 ## What you'll find here
 
 **Getting Started.** Set up VS Code with the IBM i Development Pack, connect to your IBM i, and understand how the filesystems fit together.
@@ -49,14 +51,18 @@ Examples use a consistent table-prefix field naming convention you'll encounter 
 Assumed table definitions and field lists are documented on the relevant tutorial pages.
 
 ---
+
 ## Get Started!
 
 Head to [Part 1: Get Set Up]({% link part-1/index.md %}) to begin.
-___
+
+---
 
 ## Contributing
 
 This site is open source. Spot a typo or want to improve a section? Use the **Edit this page on GitHub** link at the bottom of any page, or [open a pull request](https://github.com/K3S/rpg-tutorial) directly.
+
+---
 
 ## License
 
