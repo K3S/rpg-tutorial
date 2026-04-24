@@ -30,9 +30,9 @@ Sponsored by [King III Solutions](https://k3s.com).
 
 **[Part 3 — Build Real Things.]({% link part-3/index.md %})** Twelve progressive hands-on tutorials that build real programs — supplier lookups, batch reorder processing, service programs, price audits, CL wrappers, and unit tests — using a consistent practice dataset so examples build on each other.
 
-**[Part 4 — Going Further]({% link part-4/index.md %})** Curated map to the broader RPG community's resources for deeper learning: Scott Klement's writing, IBM's reference guides, the Code for IBM i docs, conferences, and forums.
+**[Part 4 — Going Further.]({% link part-4/index.md %})** A curated map to the broader RPG community's resources: people worth following, authoritative references, user groups, and topics this tutorial intentionally didn't cover.
 
-**Reference (coming soon).** Cheat sheets for free-format syntax, common SQLSTATEs, and daily-use CL commands.
+**[Reference.]({% link reference.md %})** Single-page cheat sheets for free-format syntax, common BIFs, SQLSTATEs, MONITOR patterns, and daily CL commands.
 
 ---
 
@@ -61,3 +61,23 @@ Free and open source under the [MIT License](https://github.com/K3S/rpg-tutorial
 ---
 
 Head to [Part 1: Get Set Up]({% link part-1/index.md %}) to begin.
+
+---
+
+## Standing on the shoulders of giants
+
+This tutorial doesn't present any of the ideas within it as our own. Modern RPG, free-format syntax, VS Code workflows, PUB400, RPGUnit — none of it was invented here. What we've tried to do is **aggregate** decades of community teaching into a single guided journey, so that someone new to IBM i can find one coherent path from "zero" to "shipping real code."
+
+The path exists because the following people and organizations built it.
+
+**The content and code examples in Part 3** are adapted from a K3S internal training curriculum written by **Mike Scampini** and **Lauren Brakke**. Their originals — pedagogical, idiomatic, well-commented — are the teaching shape underneath nearly every tutorial. Thank you for letting us share this work publicly.
+
+**The environment that makes this tutorial possible** runs on **Holger Scherer's** PUB400 public server — a free IBM i for the community, maintained continuously since 1999. Without PUB400, this site would have to assume readers already have an IBM i available. Thank you.
+
+**The VS Code tooling** our tutorial depends on is **Code for IBM i**, originally created by **Liam Allan** and now maintained by a community of contributors. It's the single thing that makes modern RPG development on IBM i approachable to newcomers. Thank you to the entire Code for IBM i team.
+
+**The community figures whose writing informs our approach** — whether cited directly in Part 4 or absorbed by osmosis through years of reading — include **Scott Klement**, **Nick Litten**, **Barbara Morris**, **Jon Paris**, **Susan Gantner**, and the many practitioners who publish through **Seiden Group**. Their work is where most of modern RPG's learning happens. We link to it, we don't try to replace it.
+
+**The RPG community as a whole** — MIDRANGE-L regulars, COMMON presenters, conference speakers, bloggers, IBM Champions, and the thousands of quiet practitioners who've kept this platform alive and relevant through forty years — is what this tutorial is ultimately a tribute to. If you learned something here, it's because someone, somewhere, taught someone else who taught someone else, long before any of us got involved.
+
+Found something missing from these credits? We'd genuinely like to get the attribution right — [open an issue or PR](https://github.com/K3S/rpg-tutorial) and we'll add it.
