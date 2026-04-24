@@ -278,4 +278,5 @@ Wave 3 is done — operational quality tools (error handling, date math, CL orch
 - **Tutorial 11** — the Roman numeral converter, a capstone that uses procedures for validation and conversion in an unexpectedly realistic way
 - **Tutorial 12** — RPGUnit, so you can write tests for all the programs in Part 3
 
-Next: *Tutorial 11: Roman Numeral Converter — A Procedures Capstone (coming in Wave 4)*.
+Next: [Tutorial 11: Roman Numeral Converter — A Procedures Capstone]({% link part-3/11-roman-numeral.md %}).
+
