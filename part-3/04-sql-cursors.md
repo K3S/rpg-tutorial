@@ -273,4 +273,5 @@ You've now done both native sequential I/O and SQL cursors. The "read many recor
 
 Tutorial 5 shifts from reading to *building* — making reusable logic by writing procedures, then packaging procedures into modules you can call from anywhere.
 
-Next: *Tutorial 5: Building Reusable Logic with Procedures (coming in Wave 2)*.
+Next: [Tutorial 5: Building Reusable Logic with Procedures]({% link part-3/05-procedures.md %}).
+
