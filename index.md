@@ -49,6 +49,10 @@ Examples use a consistent table-prefix field naming convention you'll encounter 
 Assumed table definitions and field lists are documented on the relevant tutorial pages.
 
 ---
+## Get Started!
+
+Head to [Part 1: Get Set Up]({% link part-1/index.md %}) to begin.
+___
 
 ## Contributing
 
