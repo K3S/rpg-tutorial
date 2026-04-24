@@ -12,19 +12,25 @@ You'll use them constantly. Every record read from a file is effectively a data 
 
 ## Basic declaration
 
-```rpgledcl-ds supplier qualified;
-code     char(10);
-name     varchar(50);
-active   ind;
-onboard  date;
+```rpgle
+dcl-ds supplier qualified;
+  code     char(10);
+  name     varchar(50);
+  active   ind;
+  onboard  date;
 end-ds;
+```
 
 Assign values using dot notation:
 
-```rpglesupplier.code    = 'ACME001';
+```rpgle
+supplier.code    = 'ACME001';
 supplier.name    = 'Acme Distributors';
 supplier.active  = *on;
-supplier.onboard = %date();dsply ('Supplier name: ' + %trim(supplier.name));
+supplier.onboard = %date();
+
+dsply ('Supplier name: ' + %trim(supplier.name));
+```
 
 ## Why `qualified`
 
@@ -36,13 +42,17 @@ The `qualified` keyword forces dot notation (`supplier.code` instead of just `co
 
 If you have a structure you want to declare multiple instances of, use `likeds` to reference the template:
 
-```rpgledcl-ds supplierTemplate qualified template;
-code     char(10);
-name     varchar(50);
-active   ind;
-onboard  date;
-end-ds;dcl-ds primarySupplier  likeds(supplierTemplate);
+```rpgle
+dcl-ds supplierTemplate qualified template;
+  code     char(10);
+  name     varchar(50);
+  active   ind;
+  onboard  date;
+end-ds;
+
+dcl-ds primarySupplier  likeds(supplierTemplate);
 dcl-ds backupSupplier   likeds(supplierTemplate);
+```
 
 The `template` keyword means `supplierTemplate` itself isn't a variable — it's just a shape. Only `primarySupplier` and `backupSupplier` are real, and they share the same structure.
 
@@ -50,8 +60,10 @@ The `template` keyword means `supplierTemplate` itself isn't a variable — it's
 
 You can declare a DS that matches a database table's record format:
 
-```rpgledcl-f SUPPLIER usage(*input);
+```rpgle
+dcl-f SUPPLIER usage(*input);
 dcl-ds supplierRec likerec(SP_REC);
+```
 
 Now `supplierRec` has fields matching the `SP_REC` record format — which, for our tables from Part 1 Chapter 6, means `SP_SUPL`, `SP_NAME`, `SP_ACTIVE`, `SP_ONBOARD`. When you `read SUPPLIER into supplierRec;`, the fields populate automatically.
 
@@ -61,23 +73,33 @@ This is one of the nicer integrations in RPG: the database schema and your code 
 
 Declare an array by adding a dimension:
 
-```rpgledcl-s monthlySales packed(9:2) dim(12);
-dcl-s regionCodes  char(3)     dim(50);monthlySales(1) = 45000.00;
+```rpgle
+dcl-s monthlySales packed(9:2) dim(12);
+dcl-s regionCodes  char(3)     dim(50);
+
+monthlySales(1) = 45000.00;
 monthlySales(2) = 52300.00;
-// ... etcregionCodes(1) = 'NEU';
+// ... etc
+
+regionCodes(1) = 'NEU';
 regionCodes(2) = 'AMS';
+```
 
 Indices start at **1**, not 0. This trips up most developers coming from other languages. Budget for the mistake.
 
 You can also have arrays of data structures:
 
-```rpgledcl-ds orderLines qualified dim(100);
-product   char(15);
-quantity  packed(7:0);
-unitPrice packed(9:2);
-end-ds;orderLines(1).product   = 'WIDGET-STD-001';
+```rpgle
+dcl-ds orderLines qualified dim(100);
+  product   char(15);
+  quantity  packed(7:0);
+  unitPrice packed(9:2);
+end-ds;
+
+orderLines(1).product   = 'WIDGET-STD-001';
 orderLines(1).quantity  = 5;
 orderLines(1).unitPrice = 12.99;
+```
 
 ## When to reach for a DS
 
