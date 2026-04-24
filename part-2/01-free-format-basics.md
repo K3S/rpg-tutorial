@@ -14,7 +14,9 @@ This chapter covers the raw mechanics: how to declare variables, what types exis
 
 Every modern RPG source file starts with this line:
 
-```rpgle**free
+```rpgle
+**free
+```
 
 Two asterisks, the word `free`, nothing else on the line, no leading spaces. This tells the compiler: everything that follows is fully free-format. Leave it off and the compiler assumes fixed-format — a hard-to-diagnose mistake.
 
@@ -22,12 +24,14 @@ Two asterisks, the word `free`, nothing else on the line, no leading spaces. Thi
 
 Use `dcl-s` ("declare standalone") for individual variables:
 
-```rpgledcl-s orderNumber   packed(7:0);
+```rpgle
+dcl-s orderNumber   packed(7:0);
 dcl-s customerName  varchar(50);
 dcl-s orderDate     date;
 dcl-s isActive      ind;
 dcl-s unitPrice     zoned(9:2);
 dcl-s lineCount     int(10);
+```
 
 Each declaration ends with a semicolon. Names are case-insensitive to the compiler but conventionally use camelCase or snake_case — pick one and stay consistent.
 
@@ -47,11 +51,15 @@ For most business code, `packed(n:d)` for numbers and `varchar(n)` for text are 
 
 ## Assignment and arithmetic
 
-```rpgleorderNumber  = 12345;
+```rpgle
+orderNumber  = 12345;
 customerName = 'Acme Distributors';
 unitPrice    = 29.99;
-orderDate    = %date();orderNumber += 1;        // same as orderNumber = orderNumber + 1
+orderDate    = %date();
+
+orderNumber += 1;        // same as orderNumber = orderNumber + 1
 unitPrice   *= 1.10;     // 10% markup
+```
 
 All the operators you'd expect: `+`, `-`, `*`, `/`, `**` for exponentiation, and the compound `+=`, `-=`, `*=`, `/=`.
 
@@ -59,64 +67,80 @@ All the operators you'd expect: `+`, `-`, `*`, `/`, `**` for exponentiation, and
 
 ### `if` / `elseif` / `else`
 
-```rpgleif qtyOnHand < reorderPoint;
-placeOrder = *on;
+```rpgle
+if qtyOnHand < reorderPoint;
+  placeOrder = *on;
 elseif qtyOnHand < safetyStock;
-alertBuyer = *on;
+  alertBuyer = *on;
 else;
-// no action
+  // no action
 endif;
+```
 
 Each clause ends with a semicolon. Close the whole construct with `endif;`.
 
 ### `for` loop
 
-```rpgledcl-s i int(10);for i = 1 to 10;
-totalValue += lineAmount(i);
+```rpgle
+dcl-s i int(10);
+
+for i = 1 to 10;
+  totalValue += lineAmount(i);
 endfor;
+```
 
 Also supports `downto`, `by n` for step increments, and `to *blanks` constructs.
 
 ### `dow` — do while
 
-```rpgledow not %eof(INVENTORY);
-read INVENTORY;
-if %eof(INVENTORY); leave; endif;
-// process record
+```rpgle
+dow not %eof(INVENTORY);
+  read INVENTORY;
+  if %eof(INVENTORY); leave; endif;
+  // process record
 enddo;
+```
 
 `leave` exits the loop immediately. `iter` skips to the next iteration.
 
 ### `dou` — do until
 
-```rpgledou response = 'Y' or response = 'N';
-dsply 'Continue (Y/N)?' '' response;
+```rpgle
+dou response = 'Y' or response = 'N';
+  dsply 'Continue (Y/N)?' '' response;
 enddo;
+```
 
 Same as `dow`, but the condition is checked at the bottom of the loop instead of the top.
 
 ### `select` / `when`
 
-```rpgleselect;
-when status = 'A';
-processActive();
-when status = 'P';
-processPending();
-when status = 'C' or status = 'X';
-processClosed();
-other;
-processUnknown();
+```rpgle
+select;
+  when status = 'A';
+    processActive();
+  when status = 'P';
+    processPending();
+  when status = 'C' or status = 'X';
+    processClosed();
+  other;
+    processUnknown();
 endsl;
+```
 
 Close with `endsl;` (not `endselect`). The `other` clause is the default case.
 
 ## Comments
 
-```rpgle// Single-line comment
-dcl-s x int(10);  // Inline comment/*
-Block comment.
-Multiple lines.
+```rpgle
+// Single-line comment
+dcl-s x int(10);  // Inline comment
+
+/*
+  Block comment.
+  Multiple lines.
 */
+```
 
 Both styles are supported. Use them liberally — future you is also a reader.
 
