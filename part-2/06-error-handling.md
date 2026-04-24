@@ -12,11 +12,13 @@ The solution is `monitor` — RPG's equivalent of `try`/`catch` in other languag
 
 ## Basic structure
 
-```rpglemonitor;
-// code that might fail
+```rpgle
+monitor;
+  // code that might fail
 on-error;
-// handle any error
+  // handle any error
 endmon;
+```
 
 - **`monitor`** starts a protected block
 - **`on-error`** introduces an error handler
@@ -26,16 +28,24 @@ If the code inside `monitor` raises an error, execution jumps immediately to the
 
 ## A simple example
 
-```rpgledcl-proc SafeDivide export;
-dcl-pi *n packed(9:4);
-numerator   packed(9:2) const;
-denominator packed(9:2) const;
-end-pi;dcl-s result packed(9:4);monitor;
-result = numerator / denominator;
-on-error;
-result = 0;
-endmon;return result;
+```rpgle
+dcl-proc SafeDivide export;
+  dcl-pi *n packed(9:4);
+    numerator   packed(9:2) const;
+    denominator packed(9:2) const;
+  end-pi;
+
+  dcl-s result packed(9:4);
+
+  monitor;
+    result = numerator / denominator;
+  on-error;
+    result = 0;
+  endmon;
+
+  return result;
 end-proc;
+```
 
 If `denominator` is 0, division by zero raises an error; the handler catches it and returns 0 instead of crashing.
 
@@ -43,16 +53,18 @@ If `denominator` is 0, division by zero raises an error; the handler catches it 
 
 You can branch on the specific error code:
 
-```rpglemonitor;
-result = numerator / denominator;
+```rpgle
+monitor;
+  result = numerator / denominator;
 on-error *zero-divide;
-result = 0;
+  result = 0;
 on-error *out-of-range;
-result = 9999999999.9999;
+  result = 9999999999.9999;
 on-error;
-// everything else
-result = 0;
+  // everything else
+  result = 0;
 endmon;
+```
 
 A handful of useful named statuses:
 
@@ -63,7 +75,9 @@ A handful of useful named statuses:
 
 You can also specify numeric ranges directly:
 
-```rpgleon-error 00100 : 00200;  // any status from 00100 to 00200
+```rpgle
+on-error 00100 : 00200;  // any status from 00100 to 00200
+```
 
 Order matters. On-error clauses are checked top to bottom; the first match wins.
 
@@ -71,12 +85,14 @@ Order matters. On-error clauses are checked top to bottom; the first match wins.
 
 Inside an `on-error` block, two BIFs give you diagnostic info:
 
-```rpglemonitor;
-result = numerator / denominator;
+```rpgle
+monitor;
+  result = numerator / denominator;
 on-error;
-dsply ('Error ' + %char(%status) + ': ' + %trim(%error()));
-result = 0;
+  dsply ('Error ' + %char(%status) + ': ' + %trim(%error()));
+  result = 0;
 endmon;
+```
 
 - `%status` — the numeric status code
 - `%error` — a short text description
@@ -87,37 +103,51 @@ Log these when you want to know what actually went wrong. Silently swallowing er
 
 `exec sql` statements don't raise RPG errors when they fail — they update `sqlstate` and `sqlcode` but keep executing. So `monitor` won't catch SQL errors. You check `sqlstate` explicitly:
 
-```rpgleexec sql
-update PRODUCT
-set PR_PRICE = :newPrice
-where PR_PROD = :prodCode;if sqlstate <> '00000';
-exec sql rollback;
-dsply ('SQL update failed: ' + sqlstate);
-return *off;
+```rpgle
+exec sql
+  update PRODUCT
+     set PR_PRICE = :newPrice
+   where PR_PROD = :prodCode;
+
+if sqlstate <> '00000';
+  exec sql rollback;
+  dsply ('SQL update failed: ' + sqlstate);
+  return *off;
 endif;
+```
 
 However, `monitor` *will* catch errors that happen in RPG expressions referenced by an SQL statement — for example, an overflow when you compute a host variable. The rule of thumb: `monitor` for RPG runtime errors, `sqlstate` for SQL errors.
 
 ## A realistic pattern: transactional update
 
-```rpgledcl-proc UpdatePriceWithRollback export;
-dcl-pi *n ind;
-prodCode char(15)    const;
-newPrice packed(9:2) const;
-end-pi;monitor;
-exec sql
-update PRODUCT
-set PR_PRICE = :newPrice,
-PR_CHGDT = current_date
-where PR_PROD = :prodCode;if sqlstate <> '00000';
-  exec sql rollback;
-  return *off;
-endif;exec sql commit;
-return *on;on-error;
-exec sql rollback;
-return *off;
-endmon;
+```rpgle
+dcl-proc UpdatePriceWithRollback export;
+  dcl-pi *n ind;
+    prodCode char(15)    const;
+    newPrice packed(9:2) const;
+  end-pi;
+
+  monitor;
+    exec sql
+      update PRODUCT
+         set PR_PRICE = :newPrice,
+             PR_CHGDT = current_date
+       where PR_PROD = :prodCode;
+
+    if sqlstate <> '00000';
+      exec sql rollback;
+      return *off;
+    endif;
+
+    exec sql commit;
+    return *on;
+
+  on-error;
+    exec sql rollback;
+    return *off;
+  endmon;
 end-proc;
+```
 
 Note the double defense: explicit `sqlstate` check for SQL problems, `monitor` for any RPG-level failures (like a type conversion error computing `newPrice`). Either path rolls back the transaction.
 
