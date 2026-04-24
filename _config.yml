@@ -16,6 +16,10 @@ search:
   rel_url: true
   button: false
 
+# Google Analytics
+ga_tracking: G-NCH20CWRTP
+ga_tracking_anonymize_ip: true
+
 # Navigation
 nav_sort: case_insensitive
 back_to_top: true
