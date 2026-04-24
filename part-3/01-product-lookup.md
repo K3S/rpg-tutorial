@@ -300,4 +300,4 @@ You've written a complete program that accepts input, reads the database, branch
 
 Next up: Tutorial 2 will introduce native file I/O — the classic RPG way of moving through records one at a time. You'll see how `CHAIN` and `READ` differ from embedded SQL, when each is the right tool, and why most modern RPG shops mix both.
 
-*Next tutorial coming soon.*
+Next: [Tutorial 2: Reading Records with CHAIN]({% link part-3/02-chain-io.md %}).
