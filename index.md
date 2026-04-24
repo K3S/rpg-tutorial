@@ -30,7 +30,7 @@ Sponsored by [King III Solutions](https://k3s.com).
 
 **[Part 3 — Build Real Things.]({% link part-3/index.md %})** Twelve progressive hands-on tutorials that build real programs — supplier lookups, batch reorder processing, service programs, price audits, CL wrappers, and unit tests — using a consistent practice dataset so examples build on each other.
 
-**Part 4 — Going Further (coming soon).** Curated map to the broader RPG community's resources for deeper learning: Scott Klement's writing, IBM's reference guides, the Code for IBM i docs, conferences, and forums.
+**[Part 4 — Going Further]({% link part-4/index.md %})** Curated map to the broader RPG community's resources for deeper learning: Scott Klement's writing, IBM's reference guides, the Code for IBM i docs, conferences, and forums.
 
 **Reference (coming soon).** Cheat sheets for free-format syntax, common SQLSTATEs, and daily-use CL commands.
 
