@@ -372,4 +372,5 @@ If you understand every line of REORDRPT, you understand most of what production
 
 Wave 2 is done. Wave 3 shifts to **operational quality** — the parts of professional code that aren't about features, but about running well in production. Tutorial 8 covers `MONITOR` for graceful error handling. Tutorial 9 is practical date math. Tutorial 10 is CL as the glue that schedules, sequences, and controls RPG programs.
 
-Next: *Tutorial 8: Error Handling with MONITOR (coming in Wave 3)*.
+Next: [Tutorial 8: Error Handling with MONITOR]({% link part-3/08-monitor-errors.md %}).
+
