@@ -6,7 +6,7 @@ nav_order: 9
 
 # Tutorial 9: Date Math in Practice
 
-[Part 2 Chapter 7]({% link part-2/07-date-math.md %}) covered the date BIFs — `%date`, `%days`, `%diff`, and friends. This tutorial uses them on a realistic business question: **which products haven't had a price change in too long?**
+[Part 2 Chapter 8]({% link part-2/08-date-math.md %}) covered the date BIFs — `%date`, `%days`, `%diff`, and friends. This tutorial uses them on a realistic business question: **which products haven't had a price change in too long?**
 
 Stale pricing is a real problem in distribution. A product whose price hasn't been reviewed in 18 months is probably mis-priced relative to current costs. You want a report that surfaces these for the pricing team to look at.
 
@@ -36,7 +36,7 @@ At the end it displays a summary with counts per category.
 ## Before you start
 
 - Part 1 complete — your PRODUCT data is populated
-- [Part 2 Chapter 7: Date Math]({% link part-2/07-date-math.md %}) read
+- [Part 2 Chapter 8: Date Math]({% link part-2/08-date-math.md %}) read
 - Tutorials 1–8 completed
 
 ## The program
