@@ -8,7 +8,7 @@ nav_order: 8
 
 Every program you've written so far assumes the inputs are good. Reality is messier. Users type `"abc"` into numeric fields. Calculations overflow. Divisions by zero happen. In production, your program doesn't get to choose its inputs — and the default behavior when something goes wrong is a program crash.
 
-[Part 2 Chapter 6]({% link part-2/06-error-handling.md %}) introduced `monitor` as RPG's try/catch. This tutorial puts it to work on a real batch scenario — processing a list of pricing updates, some of which are bad — and shows the difference between a program that falls over on bad data versus one that handles it and keeps running.
+[Part 2 Chapter 7]({% link part-2/07-error-handling.md %}) introduced `monitor` as RPG's try/catch. This tutorial puts it to work on a real batch scenario — processing a list of pricing updates, some of which are bad — and shows the difference between a program that falls over on bad data versus one that handles it and keeps running.
 
 ## What you'll build
 
