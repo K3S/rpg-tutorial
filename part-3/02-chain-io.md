@@ -6,7 +6,9 @@ nav_order: 2
 
 # Tutorial 2: Reading Records with CHAIN
 
-Part 2 Chapter 5 taught embedded SQL, which is how most modern RPG programs access data. But if you work on an IBM i anywhere, you'll encounter **native file I/O** — RPG's older, non-SQL way of reading and writing records. You need to know both. This tutorial teaches the first and most common native operation: `CHAIN`.
+Tutorial 1 used embedded SQL to look up a single record. This tutorial does the same kind of work using **Record Level Access** (RLA, also called native I/O) — specifically, the `CHAIN` operation.
+
+[Part 2 Chapter 6]({% link part-2/06-sql-vs-rla.md %}) laid out when each tool is the right choice. RLA wins when you're doing record-at-a-time work — positioning at a specific record by key, working with it, possibly updating in place. CHAIN is the random-access read that anchors that pattern. This tutorial gets you fluent in it.
 
 ## What you'll build
 
@@ -20,12 +22,13 @@ Functionally, this is the same thing the `exec sql ... select ... where ...` loo
 - Using `CHAIN` to perform a random-access read by key
 - Checking `%found` to see whether the key was located
 - Using `likerec` to declare a data structure that matches a file's record format
-- The tradeoffs between native I/O and embedded SQL
+- Why CHAIN is the right tool for "give me this specific record"
 
 ## Before you start
 
 - Part 1 complete — SUPPLIER, PRODUCT, and REORDCND exist with sample data
 - [Part 2 Chapter 2]({% link part-2/02-data-structures.md %}) read — this tutorial uses `likerec`
+- [Part 2 Chapter 6]({% link part-2/06-sql-vs-rla.md %}) read — this tutorial demonstrates the RLA half of that distinction
 - Tutorial 1 completed — understanding program parameters will help here
 
 ## The program
@@ -124,7 +127,7 @@ Three parts:
 
 `CHAIN` does one thing: "find the record whose key matches this value, and give it to me." If found, the target DS is populated and `%found(SUPPLIER)` returns `*on`. If not found, the target DS is cleared and `%found(SUPPLIER)` returns `*off`.
 
-Note that there's no loop, no cursor, no open/close. `CHAIN` is the native random-access primitive. It's the direct equivalent of `SELECT ... INTO ... WHERE key = ...` in SQL, but without the SQL preprocessing step.
+Note that there's no loop, no cursor, no open/close. `CHAIN` is the native random-access primitive — it's a single operation that says "go get the record at this key." That's the access pattern RLA was designed for, and it's why the operation is so direct.
 
 ### The found check
 
@@ -146,7 +149,7 @@ This matches the pattern from Tutorial 1 where we checked `sqlstate = '02000'` a
 dsply ('Onboard:  ' + %char(supRec.SP_ONBOARD));
 ```
 
-`SP_ONBOARD` is a `date` field. `%char` converts it to its string representation — the default format on IBM i is `*iso` (`YYYY-MM-DD`). [Part 2 Chapter 7]({% link part-2/07-date-math.md %}) covered date-to-string conversion.
+`SP_ONBOARD` is a `date` field. `%char` converts it to its string representation — the default format on IBM i is `*iso` (`YYYY-MM-DD`). [Part 2 Chapter 8]({% link part-2/08-date-math.md %}) covers date-to-string conversion in detail.
 
 ## Compile and run
 
@@ -185,35 +188,28 @@ CALL SUPINFO PARM('NOPE999')
 
 Should show `Supplier NOPE999   not found`. (Notice the trailing spaces — `wk_suplCode` is `char(10)`, padded with spaces. A `%trim` in the message would clean that up, and you can add it as an extension below.)
 
-## CHAIN vs embedded SQL — when to use which
+## CHAIN in context
 
-You've now looked up a record two ways:
+You've now done a single-record lookup two ways — Tutorial 1 with embedded SQL, this tutorial with CHAIN. Both work. Both are fine for this specific case.
 
-- **Tutorial 1** — `exec sql select ... from PRODUCT where PR_PROD = :wk_productCode`
-- **Tutorial 2** — `chain wk_suplCode SUPPLIER supRec`
+Where CHAIN really earns its keep is the pattern Part 2 Chapter 6 described: **record-at-a-time work**. When you're going to read a record, examine it, possibly update it, and move on to the next one in a tight loop, CHAIN (and its loop-friendly cousins READ and READE in Tutorial 3) avoid the per-statement overhead that SQL carries. For one CHAIN, the difference is invisible. For tens of thousands in a batch loop, it's measurable — and that's where shops still reach for native I/O on purpose.
 
-Both do the same fundamental thing. Knowing when to reach for each is worth a few honest paragraphs.
+For pure single-row lookup with no loop, like this tutorial, choose based on what's around it. If your program is already doing embedded SQL, use SQL for consistency. If it's a small, native-I/O-flavored program, use CHAIN. There's no wrong answer for the single-lookup case.
 
-**CHAIN is simpler for pure "give me one record by key."** No preprocessor step, no SQLSTATE to check, no host variables. Also: compile is faster (no CRTSQLRPGI), and the runtime is marginally faster because there's no SQL plan.
-
-**Embedded SQL is better when you need anything else.** Joining two tables, filtering by a non-key column, computing an aggregate, selecting only some columns, using a subquery — CHAIN can't do any of that. CHAIN also can't handle "give me all the matching records" — for that you'd need `SETLL` + `READE` (covered in Tutorial 3) or a cursor (Tutorial 4).
-
-**Modern shops lean SQL.** Over the last decade, most new RPG code uses embedded SQL for almost everything, even simple lookups, because consistency is valuable. If every data access in your codebase is SQL, there's one mental model to keep in your head. The legacy code you'll inherit has plenty of CHAIN, so you need to read it — but when you're writing new code, SQL is usually the default.
-
-One situation where CHAIN genuinely wins: inside a tight loop where you're chaining on millions of records by key. The SQL overhead can matter at scale. That's a real but narrow case.
+The "wrong answer" emerges in batch loops — using SQL for record-at-a-time updates against thousands of records when CHAIN + UPDATE would be cleaner and faster. We'll see that pattern in Tutorial 3 and again in Tutorial 7.
 
 ## Try this
 
 **Clean up the "not found" message.** Use `%trim` to drop the trailing spaces from `wk_suplCode` so the message reads `Supplier NOPE999 not found` instead of `Supplier NOPE999    not found`.
 
-**Rewrite this tutorial using embedded SQL instead.** Create a second program, SUPINFO2, that does the same thing using SQLRPGLE and `exec sql select into`. Compare line counts. Compare readability. Which one do you prefer?
+**Rewrite this tutorial using embedded SQL instead.** Create a second program, SUPINFO2, that does the same thing using SQLRPGLE and `exec sql select into`. Compare line counts. Compare readability. For a single-row lookup like this, neither is dramatically better — pick what feels right.
 
-**Show the PRODUCT count.** After finding the supplier, do a second lookup — this time with embedded SQL — for `SELECT COUNT(*) FROM PRODUCT WHERE PR_SUPL = :wk_suplCode AND PR_ACTIVE = 'Y'`. Display "Active products: N" as an additional line. You'll need to change the file type back to SQLRPGLE to do this, which is itself a useful exercise in "when does a program become SQL."
+**Show the PRODUCT count.** After finding the supplier, do a second lookup — this time with embedded SQL — for `SELECT COUNT(*) FROM PRODUCT WHERE PR_SUPL = :wk_suplCode AND PR_ACTIVE = 'Y'`. Display "Active products: N" as an additional line. You'll need to change the file type to SQLRPGLE to do this. This is a perfect example of mixing the tools — the lookup stays as RLA, the aggregate uses SQL because *aggregating across a set* is what SQL is for. Same program, both tools, each doing what it does best.
 
 **What happens if SUPPLIER isn't in your library list?** Remove it from your library list (temporarily) and try running SUPINFO again. What error do you get? This is worth doing once — it's a common production issue, and knowing what the failure mode looks like means you'll recognize it fast.
 
 ## What's next
 
-You've now done random-access reads two ways. Next up: sequential reading — walking through every record in a file, one at a time. That's Tutorial 3.
+You've now done random-access reads two ways. Next up: sequential reading — walking through every record in a file, one at a time. That's Tutorial 3, and it's where the speed advantage of native I/O really starts to show.
 
 Next: [Tutorial 3: Sequential Reading with SETLL and READ]({% link part-3/03-sequential-read.md %}).
