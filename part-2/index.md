@@ -6,7 +6,7 @@ has_children: true
 permalink: /part-2/
 ---
 
-# Part 2: Learn the Language
+# Part 2: Learn the Language 
 
 Part 1 got you connected and running Hello World. Part 2 teaches you the RPG language itself — the syntax, semantics, and patterns you'll use every day.
 
