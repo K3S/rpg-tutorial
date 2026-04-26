@@ -193,4 +193,4 @@ SELECT COUNT(*) AS PRODUCTS_BELOW_REORDER
 
 You should get 14. That's the 14 active products that the batch RPG program in Part 3 Tutorial 5 will write into REORDCND.
 
-Next: [Chapter 6: Error Handling with MONITOR]({% link part-2/06-error-handling.md %}).
+Next: [Chapter 6: Choosing Between SQL and Native I/O]({% link part-2/06-sql_vs_rla.md %}).
