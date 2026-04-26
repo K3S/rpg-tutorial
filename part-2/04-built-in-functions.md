@@ -106,7 +106,7 @@ endif;
 
 ## Date and time
 
-Briefly — full coverage in [Chapter 7]({% link part-2/07-date-math.md %}).
+Briefly — full coverage in [Chapter 8]({% link part-2/08-date-math.md %}).
 
 ```rpgle
 today  = %date();                  // today's date
