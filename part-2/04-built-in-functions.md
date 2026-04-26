@@ -102,7 +102,7 @@ if %error;
 endif;
 ```
 
-`%error` flags that the last operation raised an error. `%status` gives the numeric status code. More on these in [Chapter 6]({% link part-2/06-error-handling.md %}).
+`%error` flags that the last operation raised an error. `%status` gives the numeric status code. More on these in [Chapter 7]({% link part-2/07-error-handling.md %}).
 
 ## Date and time
 
