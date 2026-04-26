@@ -27,7 +27,7 @@ You'll write it so that bad input fails loudly with a clear message — never cr
 ## Before you start
 
 - Part 1 complete
-- [Part 2 Chapter 6: Error Handling with MONITOR]({% link part-2/06-error-handling.md %}) read
+- [Part 2 Chapter 7: Error Handling with MONITOR]({% link part-2/07-error-handling.md %}) read
 - Tutorials 1–7 completed
 
 ## The program
