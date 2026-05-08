@@ -38,6 +38,9 @@ nav_external_links:
   - title: King III Solutions
     url: https://k3s.com
     hide_icon: false
+  - title: IBM i AI Workers
+    url: https://ibmi-ai-workers.k3s.com
+    hide_icon: false
 
 # Code copy button
 enable_copy_code_button: true
