@@ -10,7 +10,8 @@ permalink: /
 
 A free, open-source tutorial for modern RPGLE and CL development on IBM i, using VS Code and contemporary tooling.
 
-Sponsored by [King III Solutions](https://k3s.com).
+[Get started](#start-here){: .btn .btn-primary .fs-5 .mb-4 .mb-md-0 .mr-2 }
+[View on GitHub](https://github.com/K3S/rpg-tutorial){: .btn .fs-5 .mb-4 .mb-md-0 }
 
 ---
 
@@ -22,7 +23,7 @@ Sponsored by [King III Solutions](https://k3s.com).
 - Students learning RPGLE and CL for the first time
 - Anyone who wants concrete, working examples of real-world RPG patterns
 
-## What you'll find here
+## Start here
 
 **[Part 1 — Get Set Up.]({% link part-1/index.md %})** Set up VS Code with the IBM i Development Pack, connect to your IBM i via the free PUB400 public server, and understand how the filesystems fit together. End with your first compiled and running Hello World.
 
